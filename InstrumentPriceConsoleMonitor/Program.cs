@@ -1,4 +1,5 @@
 ﻿using InstrumentPriceMonitorEngine;
+using InstrumentPriceMonitorEngine.Interfaces;
 using InstrumentPriceMonitorEngine.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,12 @@ namespace InstrumentPriceConsoleMonitor
     {
         static void Main(string[] args)
         {
-            var engine = new InstrumentPriceMonitorEngineRunner();
+
+            var nasdaq = new NSDQPricingSource();
+            var arca = new ARCAPricingSource();
+            var sources = new List<IPricingSource> { nasdaq, arca };
+
+            var engine = new InstrumentPriceMonitorEngineRunner(sources);
 
             engine.Start();
 

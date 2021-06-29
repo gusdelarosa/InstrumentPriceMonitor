@@ -3,3 +3,4 @@ F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitorEngine\bin\Debug\Instru
 F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitorEngine\obj\Debug\InstrumentPriceMonitorEngine.csproj.CoreCompileInputs.cache
 F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitorEngine\obj\Debug\InstrumentPriceMonitorEngine.dll
 F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitorEngine\obj\Debug\InstrumentPriceMonitorEngine.pdb
+F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitorEngine\obj\Debug\InstrumentPriceMonitorEngine.csproj.AssemblyReference.cache
