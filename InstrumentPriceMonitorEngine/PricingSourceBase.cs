@@ -59,7 +59,7 @@ namespace InstrumentPriceMonitorEngine
 
         public void Stop()
         {
-            throw new NotImplementedException();
+            _timer.Dispose();
         }
 
         public void Subscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer)
@@ -94,6 +94,11 @@ namespace InstrumentPriceMonitorEngine
             {
                 _subscriptions[instrumentTicker].Remove(observer);
             }
+        }
+
+        public IDisposable Subscribe(IObserver<InstrumentMarketData> observer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

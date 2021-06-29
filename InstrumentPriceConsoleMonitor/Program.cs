@@ -13,7 +13,6 @@ namespace InstrumentPriceConsoleMonitor
     {
         static void Main(string[] args)
         {
-
             var nasdaq = new NSDQPricingSource();
             var arca = new ARCAPricingSource();
             var sources = new List<IPricingSource> { nasdaq, arca };
@@ -25,12 +24,22 @@ namespace InstrumentPriceConsoleMonitor
             var instrumentDataObserver = new InstrumentDataObserver();
             instrumentDataObserver.OnInstrumentDataChange += OnInstrumentDataChange;
             engine.Subscribe("FSR", instrumentDataObserver);
+            engine.Subscribe("HYG", instrumentDataObserver);
             Console.WriteLine("started");
 
-            string newTicker = Console.ReadLine();
 
-            engine.Subscribe(newTicker, instrumentDataObserver);
+            while(true)
+            {
 
+                string newTicker = Console.ReadLine();
+                if(newTicker == "exit")
+                {
+                    engine.Stop();
+                    break;
+                }
+
+                engine.Subscribe(newTicker, instrumentDataObserver);
+            }
 
 
             Console.ReadLine();
