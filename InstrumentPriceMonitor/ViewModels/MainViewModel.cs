@@ -23,7 +23,17 @@ namespace InstrumentPriceMonitor.ViewModels
         private bool _isEngineRunning;
 
         public ObservableCollection<Instrument> SubscribedInstruments { get; private set; }
-        public string NewTicker { get; set; }
+        private string _newTicker = "";
+        public string NewTicker
+        {
+            get { return _newTicker; }
+
+            set
+            {
+                _newTicker = value;
+                SubscribeCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         public MainViewModel(IInstrumentPriceMonitorEngine instrumenPriceEngine, ITickerRepo supportedTickerRepo)
         {
@@ -35,15 +45,13 @@ namespace InstrumentPriceMonitor.ViewModels
 
             InitializeCommands();
 
-            //TODO: Remove this. testing only
-            //StartEngine();
-            SubscribeToInstrument("FSR");
         }
 
         private void InitializeCommands()
         {
             StartEngineCommand = new RelayCommand(StartEngine, CanStartEngine);
             StopEngineCommand = new RelayCommand(StopEngine, CanStopEngine);
+            SubscribeCommand = new RelayCommand(SubscribeToInstrument, CanSubscribe);
         }
 
         private void OnInstrumentDataChange(object sender, InstrumentMarketData e)
@@ -85,8 +93,14 @@ namespace InstrumentPriceMonitor.ViewModels
             RaiseCanExecuteChanged();
         }
 
-        public void SubscribeToInstrument(string ticker)
+        public void SubscribeToInstrument()
         {
+            var ticker = NewTicker.ToUpperInvariant();
+
+            if (string.IsNullOrEmpty(ticker))
+            {
+                return;
+            }
             Instrument instrument = SubscribedInstruments.FirstOrDefault(i => i.Ticker == ticker);
 
             if (instrument == null)
@@ -97,6 +111,7 @@ namespace InstrumentPriceMonitor.ViewModels
             }
 
             NewTicker = string.Empty;
+            RaiseCanExecuteChanged();
         }
 
         public void UnsubscribeFromInstrument(string ticker)
@@ -129,6 +144,14 @@ namespace InstrumentPriceMonitor.ViewModels
         {
             StopEngineCommand.RaiseCanExecuteChanged();
             StartEngineCommand.RaiseCanExecuteChanged();
+            SubscribeCommand.RaiseCanExecuteChanged();
+        }
+
+        public RelayCommand SubscribeCommand { get; private set; }
+
+        private bool CanSubscribe()
+        {            
+            return !string.IsNullOrEmpty(NewTicker);
         }
 
     }
