@@ -10,7 +10,7 @@ namespace InstrumentPriceMonitorEngine
 {
     public class NSDQPricingSource : PricingSourceBase
     {
-        public override string SourceName => "NSDQ";
+        public override string SourceName => "NASDAQ";
 
         public NSDQPricingSource(ITickerRepo tickerRepo) : base(tickerRepo)
         {

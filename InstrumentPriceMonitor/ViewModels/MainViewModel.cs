@@ -1,4 +1,5 @@
 ﻿using InstrumentPriceMonitor.Models;
+using InstrumentPriceMonitor.Util;
 using InstrumentPriceMonitorEngine;
 using InstrumentPriceMonitorEngine.Interfaces;
 using InstrumentPriceMonitorEngine.Models;
@@ -22,6 +23,8 @@ namespace InstrumentPriceMonitor.ViewModels
         private bool _isEngineRunning;
 
         public ObservableCollection<Instrument> SubscribedInstruments { get; private set; }
+        public string NewTicker { get; set; }
+
         public MainViewModel(IInstrumentPriceMonitorEngine instrumenPriceEngine, ITickerRepo supportedTickerRepo)
         {
             _instrumenPriceEngine = instrumenPriceEngine;
@@ -30,8 +33,17 @@ namespace InstrumentPriceMonitor.ViewModels
             _instrumentObserver.OnInstrumentDataChange += OnInstrumentDataChange;
             SubscribedInstruments = new ObservableCollection<Instrument>();
 
-            StartEngine();
+            InitializeCommands();
+
+            //TODO: Remove this. testing only
+            //StartEngine();
             SubscribeToInstrument("FSR");
+        }
+
+        private void InitializeCommands()
+        {
+            StartEngineCommand = new RelayCommand(StartEngine, CanStartEngine);
+            StopEngineCommand = new RelayCommand(StopEngine, CanStopEngine);
         }
 
         private void OnInstrumentDataChange(object sender, InstrumentMarketData e)
@@ -58,6 +70,19 @@ namespace InstrumentPriceMonitor.ViewModels
 
             _instrumenPriceEngine.StartEngine();
             _isEngineRunning = true;
+            RaiseCanExecuteChanged();
+        }
+
+        public void StopEngine()
+        {
+            if (!_isEngineRunning)
+            {
+                return;
+            }
+
+            _instrumenPriceEngine.StopEngine();
+            _isEngineRunning = false;
+            RaiseCanExecuteChanged();
         }
 
         public void SubscribeToInstrument(string ticker)
@@ -70,6 +95,8 @@ namespace InstrumentPriceMonitor.ViewModels
                 _supportedTickerRepo.AddTickerSupportIfDoesNotExist(ticker);
                 _instrumenPriceEngine.SubscribeToTicker(ticker, _instrumentObserver);
             }
+
+            NewTicker = string.Empty;
         }
 
         public void UnsubscribeFromInstrument(string ticker)
@@ -82,6 +109,26 @@ namespace InstrumentPriceMonitor.ViewModels
                 _instrumenPriceEngine.UnsubscribeToTicker(ticker, _instrumentObserver);
                 SubscribedInstruments.Remove(instrument);
             }
+        }
+
+        public RelayCommand StartEngineCommand { get; private set; }
+
+        private bool CanStartEngine()
+        {
+            return !_isEngineRunning;
+        }
+
+        public RelayCommand StopEngineCommand { get; private set; }
+
+        private bool CanStopEngine()
+        {
+            return _isEngineRunning;
+        }
+
+        private void RaiseCanExecuteChanged()
+        {
+            StopEngineCommand.RaiseCanExecuteChanged();
+            StartEngineCommand.RaiseCanExecuteChanged();
         }
 
     }
