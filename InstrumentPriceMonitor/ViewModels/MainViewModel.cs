@@ -6,6 +6,7 @@ using InstrumentPriceMonitorEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ using System.Windows.Threading;
 
 namespace InstrumentPriceMonitor.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
 
         private readonly IInstrumentPriceMonitorEngine _instrumenPriceEngine;
@@ -24,6 +25,9 @@ namespace InstrumentPriceMonitor.ViewModels
 
         public ObservableCollection<Instrument> SubscribedInstruments { get; private set; }
         private string _newTicker = "";
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string NewTicker
         {
             get { return _newTicker; }
@@ -32,6 +36,7 @@ namespace InstrumentPriceMonitor.ViewModels
             {
                 _newTicker = value;
                 SubscribeCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged("NewTicker");
             }
         }
 
@@ -154,6 +159,11 @@ namespace InstrumentPriceMonitor.ViewModels
         }
 
         public RelayCommand<Instrument> UnSubscribeCommand { get; private set; }
+
+        private void OnPropertyChanged(string v)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(v));
+        }
 
     }
 }
