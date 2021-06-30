@@ -14,9 +14,10 @@ namespace InstrumentPriceMonitorEngine
         public abstract string SourceName { get; }
         protected int IntervalInMilliseconds { get; set; } = 2000;
 
-        private List<IObserver<InstrumentMarketData>> _observers = new List<IObserver<InstrumentMarketData>>();        
+        private List<IObserver<InstrumentMarketData>> _observers = new List<IObserver<InstrumentMarketData>>();
         private readonly Timer _timer;
         private readonly ITickerRepo _tickerRepo;
+        private readonly Random _random = new Random();            
 
         public PricingSourceBase(ITickerRepo tickerRepo)
         {
@@ -53,9 +54,8 @@ namespace InstrumentPriceMonitorEngine
         }
 
         private double GenerateRandomPrice()
-        {
-            Random random = new Random();
-            return Math.Round(random.NextDouble(), 2);
+        {            
+            return Math.Round(_random.NextDouble(), 2);
         }
 
         public IDisposable Subscribe(IObserver<InstrumentMarketData> observer)
