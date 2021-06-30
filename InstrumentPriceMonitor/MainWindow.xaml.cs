@@ -1,6 +1,7 @@
 ﻿using InstrumentPriceMonitor.ViewModels;
 using InstrumentPriceMonitorEngine;
 using InstrumentPriceMonitorEngine.Interfaces;
+using InstrumentPriceMonitorEngine.PricingSources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,8 @@ namespace InstrumentPriceMonitor
             var supportedTickerRepo = new TickerRepo(); //This is used to add support for unknown tickers since we assume any ticker is supported. 
             var nasdaq = new NSDQPricingSource(supportedTickerRepo);
             var arca = new ARCAPricingSource(supportedTickerRepo);
-            var sources = new List<IPricingSource> { nasdaq, arca };            
+            var nyse = new NYSEPricingSource(supportedTickerRepo);
+            var sources = new List<IPricingSource> { nasdaq, arca, nyse };            
             var engine = new InstrumentPriceMonitorEngineRunner(sources);
 
             var viewModel = new MainViewModel(engine, supportedTickerRepo);

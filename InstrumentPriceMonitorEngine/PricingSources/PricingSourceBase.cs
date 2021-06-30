@@ -12,7 +12,7 @@ namespace InstrumentPriceMonitorEngine
     public abstract class PricingSourceBase : IPricingSource
     {
         public abstract string SourceName { get; }
-        protected int Interval { get; set; } = 2000;
+        protected int IntervalInMilliseconds { get; set; } = 2000;
 
         private List<IObserver<InstrumentMarketData>> _observers = new List<IObserver<InstrumentMarketData>>();        
         private readonly Timer _timer;
@@ -26,7 +26,7 @@ namespace InstrumentPriceMonitorEngine
 
         public void StartListening()
         {
-            _timer.Change(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(Interval));
+            _timer.Change(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(IntervalInMilliseconds));
         }
 
         public void StopListening()
@@ -55,7 +55,7 @@ namespace InstrumentPriceMonitorEngine
         private double GenerateRandomPrice()
         {
             Random random = new Random();
-            return random.NextDouble();
+            return Math.Round(random.NextDouble(), 2);
         }
 
         public IDisposable Subscribe(IObserver<InstrumentMarketData> observer)

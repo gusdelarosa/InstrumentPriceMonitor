@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace InstrumentPriceMonitorEngine.PricingSources
 {
-    public class ARCAPricingSource : PricingSourceBase
+    public class NYSEPricingSource : PricingSourceBase
     {
-        public override string SourceName => "ARCA";
+        public override string SourceName => "NYSE";
 
-        public ARCAPricingSource(ITickerRepo tickerRepo) : base(tickerRepo)
+        public NYSEPricingSource(ITickerRepo tickerRepo) : base(tickerRepo)
         {
-            IntervalInMilliseconds = 200;
+            IntervalInMilliseconds = 700;
         }
     }
 }

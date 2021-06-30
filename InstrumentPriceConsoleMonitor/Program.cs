@@ -1,6 +1,7 @@
 ﻿using InstrumentPriceMonitorEngine;
 using InstrumentPriceMonitorEngine.Interfaces;
 using InstrumentPriceMonitorEngine.Models;
+using InstrumentPriceMonitorEngine.PricingSources;
 using System;
 using System.Collections.Generic;
 using System.Linq;

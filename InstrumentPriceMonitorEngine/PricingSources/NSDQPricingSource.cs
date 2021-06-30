@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InstrumentPriceMonitorEngine
+namespace InstrumentPriceMonitorEngine.PricingSources
 {
     public class NSDQPricingSource : PricingSourceBase
     {
@@ -14,7 +14,7 @@ namespace InstrumentPriceMonitorEngine
 
         public NSDQPricingSource(ITickerRepo tickerRepo) : base(tickerRepo)
         {
-            Interval = 500;
+            IntervalInMilliseconds = 500;
         }
     }
 }

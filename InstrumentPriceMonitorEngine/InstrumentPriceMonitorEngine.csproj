@@ -49,6 +49,7 @@
     <Compile Include="Interfaces\IPricingSource.cs" />
     <Compile Include="Models\InstrumentMarketData.cs" />
     <Compile Include="PricingSources\NSDQPricingSource.cs" />
+    <Compile Include="PricingSources\NYSEPricingSource.cs" />
     <Compile Include="PricingSources\PricingSourceBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TickerRepo.cs" />
