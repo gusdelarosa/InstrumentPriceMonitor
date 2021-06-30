@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ITickerRepo.cs" />
     <Compile Include="PricingSources\ARCAPricingSource.cs" />
     <Compile Include="InstrumentDataObserver.cs" />
     <Compile Include="InstrumentPriceMonitorEngineRunner.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="PricingSources\NSDQPricingSource.cs" />
     <Compile Include="PricingSources\PricingSourceBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TickerRepo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

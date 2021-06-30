@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InstrumentPriceMonitorEngine.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace InstrumentPriceMonitorEngine
     {
         public override string SourceName => "ARCA";
 
-        public ARCAPricingSource()
+        public ARCAPricingSource(ITickerRepo tickerRepo) : base(tickerRepo)
         {
             Interval = 200;
         }

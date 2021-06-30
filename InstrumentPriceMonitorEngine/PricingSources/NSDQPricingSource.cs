@@ -12,7 +12,7 @@ namespace InstrumentPriceMonitorEngine
     {
         public override string SourceName => "NSDQ";
 
-        public NSDQPricingSource()
+        public NSDQPricingSource(ITickerRepo tickerRepo) : base(tickerRepo)
         {
             Interval = 500;
         }

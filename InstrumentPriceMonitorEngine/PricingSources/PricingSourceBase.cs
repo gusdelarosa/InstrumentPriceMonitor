@@ -13,14 +13,15 @@ namespace InstrumentPriceMonitorEngine
     {
         public abstract string SourceName { get; }
         protected int Interval { get; set; } = 2000;
-        
-        private List<IObserver<InstrumentMarketData>> _observers = new List<IObserver<InstrumentMarketData>>();
-        private List<string> _instrumentTickers = new List<string>() { "FSR" };
-        private readonly Timer _timer;
 
-        public PricingSourceBase()
+        private List<IObserver<InstrumentMarketData>> _observers = new List<IObserver<InstrumentMarketData>>();        
+        private readonly Timer _timer;
+        private readonly ITickerRepo _tickerRepo;
+
+        public PricingSourceBase(ITickerRepo tickerRepo)
         {
             _timer = new Timer(PublishPrices, null, Timeout.Infinite, Timeout.Infinite);
+            _tickerRepo = tickerRepo;
         }
 
         public void StartListening()
@@ -35,7 +36,7 @@ namespace InstrumentPriceMonitorEngine
 
         private void PublishPrices(object state)
         {
-            foreach (var instrumentTicker in _instrumentTickers)
+            foreach (var instrumentTicker in _tickerRepo.GetTickers())
             {
                 var instrumentData = new InstrumentMarketData(instrumentTicker)
                 {
@@ -43,7 +44,7 @@ namespace InstrumentPriceMonitorEngine
                     LastUpdated = DateTime.Now,
                     Source = SourceName
                 };
-                
+
                 foreach (var observer in _observers)
                 {
                     observer.OnNext(instrumentData);

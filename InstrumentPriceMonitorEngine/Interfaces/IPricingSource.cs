@@ -10,6 +10,6 @@ namespace InstrumentPriceMonitorEngine.Interfaces
     public interface IPricingSource : IObservable<InstrumentMarketData>
     {
         void StartListening();
-        void StopListening();        
+        void StopListening();
     }
 }
