@@ -41,15 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ARCAPricingSource.cs" />
+    <Compile Include="PricingSources\ARCAPricingSource.cs" />
     <Compile Include="InstrumentDataObserver.cs" />
     <Compile Include="InstrumentPriceMonitorEngineRunner.cs" />
     <Compile Include="Interfaces\IInstrumentPriceMonitorEngine.cs" />
     <Compile Include="Interfaces\IPricingSource.cs" />
     <Compile Include="Models\Instrument.cs" />
     <Compile Include="Models\InstrumentMarketData.cs" />
-    <Compile Include="NSDQPricingSource.cs" />
-    <Compile Include="PricingSourceBase.cs" />
+    <Compile Include="PricingSources\NSDQPricingSource.cs" />
+    <Compile Include="PricingSources\PricingSourceBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -12,7 +12,7 @@ namespace InstrumentPriceConsoleMonitor
     class Program
     {
         static void Main(string[] args)
-        {
+        {            
             var nasdaq = new NSDQPricingSource();
             var arca = new ARCAPricingSource();
             var sources = new List<IPricingSource> { nasdaq, arca };
