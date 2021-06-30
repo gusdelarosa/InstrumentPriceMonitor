@@ -7,8 +7,8 @@ WPF application that displays simulated instrument prices
 
 - Any ticker the UI subscribes to exist and will generate data
 - Prices up to two decimal places
-- 
-  - 
+- Any ticker entered is valid, no validation exists
+- Prices displayed are simulated, not real prices
 
 ## Overview
 
