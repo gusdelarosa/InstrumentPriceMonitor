@@ -52,6 +52,7 @@ namespace InstrumentPriceMonitor.ViewModels
             StartEngineCommand = new RelayCommand(StartEngine, CanStartEngine);
             StopEngineCommand = new RelayCommand(StopEngine, CanStopEngine);
             SubscribeCommand = new RelayCommand(SubscribeToInstrument, CanSubscribe);
+            UnSubscribeCommand = new RelayCommand<Instrument>(UnsubscribeFromInstrument);
         }
 
         private void OnInstrumentDataChange(object sender, InstrumentMarketData e)
@@ -114,14 +115,12 @@ namespace InstrumentPriceMonitor.ViewModels
             RaiseCanExecuteChanged();
         }
 
-        public void UnsubscribeFromInstrument(string ticker)
+        public void UnsubscribeFromInstrument(Instrument instrument)
         {
-            Instrument instrument = SubscribedInstruments.FirstOrDefault(i => i.Ticker == ticker);
-
             if (instrument != null)
             {
 
-                _instrumenPriceEngine.UnsubscribeToTicker(ticker, _instrumentObserver);
+                _instrumenPriceEngine.UnsubscribeToTicker(instrument.Ticker, _instrumentObserver);
                 SubscribedInstruments.Remove(instrument);
             }
         }
@@ -153,6 +152,8 @@ namespace InstrumentPriceMonitor.ViewModels
         {            
             return !string.IsNullOrEmpty(NewTicker);
         }
+
+        public RelayCommand<Instrument> UnSubscribeCommand { get; private set; }
 
     }
 }

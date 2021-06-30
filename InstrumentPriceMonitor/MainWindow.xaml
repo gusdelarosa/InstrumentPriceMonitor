@@ -16,7 +16,17 @@
                 <DataGridTextColumn Header="Ticker" Binding="{Binding Ticker}"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
                 <DataGridTextColumn Header="Exchange" Binding="{Binding SourceName}"/>
-                <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated, StringFormat=\{0:HH:mm:ss.fff\}}"/>                
+                <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated, StringFormat=\{0:HH:mm:ss.fff\}}"/>
+                <DataGridTemplateColumn Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Unsubscribe"
+								Command="{Binding DataContext.UnSubscribeCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+								CommandParameter="{Binding}"
+								Margin="1" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             
 
