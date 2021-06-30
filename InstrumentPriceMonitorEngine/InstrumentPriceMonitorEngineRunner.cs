@@ -9,45 +9,89 @@ using System.Threading.Tasks;
 
 namespace InstrumentPriceMonitorEngine
 {
-    public class InstrumentPriceMonitorEngineRunner : IInstrumentPriceMonitorEngine
+    public class InstrumentPriceMonitorEngineRunner : IInstrumentPriceMonitorEngine, IObserver<InstrumentMarketData>
     {
+        private Dictionary<string, List<IObserver<InstrumentMarketData>>> _subscriptions = new Dictionary<string, List<IObserver<InstrumentMarketData>>>();
         private static ICollection<IPricingSource> _pricingSources;
+        private static ICollection<IDisposable> _priceSourceSubscribers = new List<IDisposable>();
 
         public InstrumentPriceMonitorEngineRunner(ICollection<IPricingSource> pricingSources)
         {
             _pricingSources = pricingSources;
         }
 
-        public void Start()
+        public void StartEngine()
+        {
+            SubscribeToPriceSources();
+        }
+
+        public void StopEngine()
+        {
+            UnsubscribeToPriceSources();
+        }
+
+        private void SubscribeToPriceSources()
         {
             foreach (var pricingSource in _pricingSources)
             {
-                pricingSource.Start();
+                pricingSource.StartListening();
+                var priceSourceSubscriber = pricingSource.Subscribe(this);
+                _priceSourceSubscribers.Add(priceSourceSubscriber);
             }
         }
 
-        public void Stop()
+        private void UnsubscribeToPriceSources()
         {
             foreach (var pricingSource in _pricingSources)
             {
-                pricingSource.Stop();
+                pricingSource.StopListening();
             }
-        }
 
-        public void Subscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer)
-        {            
-            foreach (var pricingSource in _pricingSources)
+            foreach (var priceSourceSubscriber in _priceSourceSubscribers)
             {
-                pricingSource.Subscribe(instrumentTicker, observer);
+                priceSourceSubscriber.Dispose();
             }
         }
 
-        public void Unsubscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer)
+        public void SubscribeToTicker(string instrumentTicker, IObserver<InstrumentMarketData> observer)
         {
-            foreach (var pricingSource in _pricingSources)
+            if (_subscriptions.TryGetValue(instrumentTicker, out List<IObserver<InstrumentMarketData>> observers))
             {
-                pricingSource.Unsubscribe(instrumentTicker, observer);
+                observers.Add(observer);
             }
+            else
+            {
+                _subscriptions[instrumentTicker] = new List<IObserver<InstrumentMarketData>> { observer };
+            }
+        }
+
+        public void UnsubscribeToTicker(string instrumentTicker, IObserver<InstrumentMarketData> observer)
+        {
+            if (_subscriptions.TryGetValue(instrumentTicker, out List<IObserver<InstrumentMarketData>> observers))
+            {
+                observers.Remove(observer);
+            }
+        }
+
+        public void OnNext(InstrumentMarketData value)
+        {
+            if (_subscriptions.TryGetValue(value.Ticker, out List<IObserver<InstrumentMarketData>> observers))
+            {
+                foreach (var observer in observers)
+                {
+                    observer.OnNext(value);
+                }
+            }
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
         }
     }
 }

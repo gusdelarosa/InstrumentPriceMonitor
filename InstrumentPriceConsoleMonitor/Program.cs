@@ -19,12 +19,12 @@ namespace InstrumentPriceConsoleMonitor
 
             var engine = new InstrumentPriceMonitorEngineRunner(sources);
 
-            engine.Start();
+            engine.StartEngine();
 
             var instrumentDataObserver = new InstrumentDataObserver();
             instrumentDataObserver.OnInstrumentDataChange += OnInstrumentDataChange;
-            engine.Subscribe("FSR", instrumentDataObserver);
-            engine.Subscribe("HYG", instrumentDataObserver);
+            engine.SubscribeToTicker("FSR", instrumentDataObserver);
+            engine.SubscribeToTicker("HYG", instrumentDataObserver);
             Console.WriteLine("started");
 
 
@@ -34,16 +34,17 @@ namespace InstrumentPriceConsoleMonitor
                 string newTicker = Console.ReadLine();
                 if(newTicker == "exit")
                 {
-                    engine.Stop();
+                    engine.StopEngine();
                     break;
                 }
-
-                engine.Subscribe(newTicker, instrumentDataObserver);
+                
+                engine.SubscribeToTicker(newTicker, instrumentDataObserver);
             }
 
 
             Console.ReadLine();
 
+            engine.StopEngine();
         }
 
         private static void OnInstrumentDataChange(object sender, InstrumentMarketData e)

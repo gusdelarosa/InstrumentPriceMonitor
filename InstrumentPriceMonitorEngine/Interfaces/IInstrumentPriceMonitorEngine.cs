@@ -9,9 +9,9 @@ namespace InstrumentPriceMonitorEngine.Interfaces
 {
     public interface IInstrumentPriceMonitorEngine
     {
-        void Start();
-        void Stop();  
-        void Subscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer);
-        void Unsubscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer);
+        void StartEngine();
+        void StopEngine();  
+        void SubscribeToTicker(string instrumentTicker, IObserver<InstrumentMarketData> observer);
+        void UnsubscribeToTicker(string instrumentTicker, IObserver<InstrumentMarketData> observer);
     }
 }

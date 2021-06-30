@@ -13,9 +13,9 @@ namespace InstrumentPriceMonitorEngine
     {
         public abstract string SourceName { get; }
         protected int Interval { get; set; } = 2000;
-
-        private Dictionary<string, List<IObserver<InstrumentMarketData>>> _subscriptions = new Dictionary<string, List<IObserver<InstrumentMarketData>>>();
-        private List<InstrumentMarketData> _instruments = new List<InstrumentMarketData>();
+        
+        private List<IObserver<InstrumentMarketData>> _observers = new List<IObserver<InstrumentMarketData>>();
+        private List<string> _instrumentTickers = new List<string>() { "FSR" };
         private readonly Timer _timer;
 
         public PricingSourceBase()
@@ -23,30 +23,30 @@ namespace InstrumentPriceMonitorEngine
             _timer = new Timer(PublishPrices, null, Timeout.Infinite, Timeout.Infinite);
         }
 
-        public void Start()
+        public void StartListening()
         {
             _timer.Change(TimeSpan.FromSeconds(1), TimeSpan.FromMilliseconds(Interval));
         }
 
+        public void StopListening()
+        {
+            _timer.Change(Timeout.Infinite, Timeout.Infinite);
+        }
+
         private void PublishPrices(object state)
         {
-            foreach (var subscribedTicker in _subscriptions.Keys)
+            foreach (var instrumentTicker in _instrumentTickers)
             {
-                InstrumentMarketData instrument = _instruments.FirstOrDefault(i => i.Ticker == subscribedTicker);
-
-                if (instrument == null)
+                var instrumentData = new InstrumentMarketData(instrumentTicker)
                 {
-                    continue;
-                }
-
-                instrument.Price = GenerateRandomPrice();
-                instrument.LastUpdated = DateTime.Now;
-                instrument.Source = SourceName;
-
-                var observers = _subscriptions[subscribedTicker];
-                foreach (var observer in observers)
+                    Price = GenerateRandomPrice(),
+                    LastUpdated = DateTime.Now,
+                    Source = SourceName
+                };
+                
+                foreach (var observer in _observers)
                 {
-                    observer.OnNext(instrument);
+                    observer.OnNext(instrumentData);
                 }
             }
         }
@@ -57,48 +57,31 @@ namespace InstrumentPriceMonitorEngine
             return random.NextDouble();
         }
 
-        public void Stop()
-        {
-            _timer.Dispose();
-        }
-
-        public void Subscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer)
-        {
-            //add to instrument list 
-            InstrumentMarketData instrumentMarketData = _instruments.FirstOrDefault(i => i.Ticker == instrumentTicker);
-
-            if (instrumentMarketData == null)
-            {
-                instrumentMarketData = new InstrumentMarketData(instrumentTicker);
-
-                _instruments.Add(instrumentMarketData);
-                _subscriptions[instrumentTicker] = new List<IObserver<InstrumentMarketData>> { observer };
-                return;
-            }
-            else
-            {
-                List<IObserver<InstrumentMarketData>> instrumentObservers = _subscriptions[instrumentTicker];
-
-                if (!instrumentObservers.Contains(observer))
-                {
-                    instrumentObservers.Add(observer);
-                }
-            }
-            //TODO: Dispose
-
-        }
-
-        public void Unsubscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer)
-        {
-            if (_subscriptions.ContainsKey(instrumentTicker))
-            {
-                _subscriptions[instrumentTicker].Remove(observer);
-            }
-        }
-
         public IDisposable Subscribe(IObserver<InstrumentMarketData> observer)
         {
-            throw new NotImplementedException();
+            if (!_observers.Contains(observer))
+            {
+                _observers.Add(observer);
+            }
+
+            return new Unsubscriber(_observers, observer);
+        }
+        private class Unsubscriber : IDisposable
+        {
+            private List<IObserver<InstrumentMarketData>> _observers;
+            private IObserver<InstrumentMarketData> _observer;
+
+            public Unsubscriber(List<IObserver<InstrumentMarketData>> observers, IObserver<InstrumentMarketData> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if (_observer != null && _observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
     }
 }

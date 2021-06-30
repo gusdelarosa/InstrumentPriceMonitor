@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace InstrumentPriceMonitorEngine.Interfaces
 {
-    public interface IPricingSource
+    public interface IPricingSource : IObservable<InstrumentMarketData>
     {
-        void Start();
-        void Stop();
-        void Subscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer);
-        void Unsubscribe(string instrumentTicker, IObserver<InstrumentMarketData> observer);
+        void StartListening();
+        void StopListening();        
     }
 }
