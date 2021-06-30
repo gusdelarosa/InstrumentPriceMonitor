@@ -13,7 +13,7 @@ WPF application that displays simulated instrument prices
 ## Overview
 
 - The Engine 
-  - Dependency: List of Price Sources
+  - Dependency: Collection of Price Sources
   - The engine subscribes to published data from all of its price sources 
   - When new instrument  Instrument Data is published by any of the price sources, the engine then relays that information to its subscribers
 - Ticker repo
