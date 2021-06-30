@@ -7,6 +7,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <DataGrid ItemsSource="{Binding SubscribedInstruments }" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="235" Margin="10,30,0,0" VerticalAlignment="Top" Width="720">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Ticker" Binding="{Binding Ticker}"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}"/>
+                <DataGridTextColumn Header="Exchange" Binding="{Binding SourceName}"/>                
+                <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated}"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+
     </Grid>
 </Window>

@@ -13,3 +13,6 @@ F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\obj\Debug\InstrumentPr
 F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\obj\Debug\InstrumentPriceMonitor.csproj.CoreCompileInputs.cache
 F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\obj\Debug\InstrumentPriceMonitor.exe
 F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\obj\Debug\InstrumentPriceMonitor.pdb
+F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\bin\Debug\InstrumentPriceMonitorEngine.dll
+F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\bin\Debug\InstrumentPriceMonitorEngine.pdb
+F:\Projects\InstrumentPriceMonitor\InstrumentPriceMonitor\obj\Debug\InstrumentPriceMonitor.csproj.CopyComplete

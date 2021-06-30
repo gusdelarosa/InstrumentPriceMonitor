@@ -47,7 +47,6 @@
     <Compile Include="InstrumentPriceMonitorEngineRunner.cs" />
     <Compile Include="Interfaces\IInstrumentPriceMonitorEngine.cs" />
     <Compile Include="Interfaces\IPricingSource.cs" />
-    <Compile Include="Models\Instrument.cs" />
     <Compile Include="Models\InstrumentMarketData.cs" />
     <Compile Include="PricingSources\NSDQPricingSource.cs" />
     <Compile Include="PricingSources\PricingSourceBase.cs" />
